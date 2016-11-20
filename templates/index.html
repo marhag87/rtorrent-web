@@ -1,0 +1,36 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="static/style.css">
+<title>Martin's Kickass rTorrent viewer</title>
+</head>
+<body>
+<div id="container">
+	<div id="series">
+		<h1>Series</h1>
+		<table>
+      <tr>
+        <th>Status</th>
+        <th>Name</th>
+        <th>Ratio</th>
+      </tr>
+			{% for torrent in series %}
+				{% include 'torrent_line.html' %}
+			{% endfor %}
+		</table>
+	</div>
+	<div id="movies">
+		<h1>Movies</h1>
+		<table>
+      <tr>
+        <th>Status</th>
+        <th>Name</th>
+        <th>Ratio</th>
+      </tr>
+			{% for torrent in movies %}
+				{% include 'torrent_line.html' %}
+			{% endfor %}
+		</table>
+	</div>
+</div>
+</body>
+</html>

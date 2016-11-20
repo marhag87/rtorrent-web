@@ -1,0 +1,12 @@
+<tr>
+  <td class="progress_bar" style="background: white;">
+    <progress class="progress-{{ torrent.completed_percent }}" value="{{ torrent.completed_percent }}" max="100" title="{{ torrent.completed_percent }}%">
+    </progress>
+  </td>
+  <td class="torrent_name">
+    {{ torrent.name }}
+  </td>
+  <td class="ratio">
+    {{ '{0:.2f}'.format(torrent.ratio) }}
+  </td>
+</tr>

@@ -1,0 +1,23 @@
+progress {
+	width: 5em;
+}
+.progress-100 {
+  background-color: green;
+}
+
+#container {
+  width: 100%;
+}
+
+#series {
+  float: left;
+  width: 50%;
+}
+
+#movies {
+  float: right;
+  width: 50%;
+}
+
+tr:nth-child(even) {background: white}
+tr:nth-child(odd) {background: #DDD}
