@@ -100,3 +100,5 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
+
+.progress {margin-bottom:0}
