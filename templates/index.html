@@ -59,11 +59,10 @@
                             </thead>
 
                             <tbody>
-                                {% for torrent in series %}
-                                    {% include 'torrent_dashboard.html' %}
-                                {% endfor %}
-                                {% for torrent in movies %}
-                                    {% include 'torrent_dashboard.html' %}
+                                {% for client in clients %}
+                                    {% for torrent in client.torrents %}
+                                        {% include 'torrent_dashboard.html' %}
+                                    {% endfor %}
                                 {% endfor %}
                             </tbody>
                         </table>
