@@ -8,8 +8,9 @@ app = Flask(__name__)
 series_client = Rtorrent('http://192.168.1.2:8008')
 movies_client = Rtorrent('http://192.168.1.2:8009')
 
+
 @app.route('/')
-def hello():
+def dashboard():
     series = series_client.all_torrents()
     series.sort(key=lambda x: x.name)
     movies = movies_client.all_torrents()

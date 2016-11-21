@@ -1,0 +1,35 @@
+<tr>
+    <td>
+        <div class="progress">
+            {% if torrent.completed_percent < 100 %}
+                <div
+                        class="progress-bar progress-bar-striped active"
+                        role="progressbar"
+                        aria-valuenow="{{ torrent.completed_percent }}"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        style="width: {{ torrent.completed_percent }}%"
+                        title="{{ torrent.completed_percent }}%"
+                >
+                </div>
+            {% else %}
+                <div
+                        class="progress-bar progress-bar-success"
+                        role="progressbar"
+                        aria-valuenow="{{ torrent.completed_percent }}"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        style="width: {{ torrent.completed_percent }}%"
+                        title="{{ torrent.completed_percent }}%"
+                >
+                </div>
+            {% endif %}
+        </div>
+    </td>
+    <td>
+        {{ torrent.name }}
+    </td>
+    <td>
+        {{ '{0:.2f}'.format(torrent.ratio) }}
+    </td>
+</tr>
