@@ -7,7 +7,8 @@ from pyyamlconfig import load_config
 from pyrtorrent import Rtorrent
 
 app = Flask(__name__)
-_CLIENTS = load_config('config.yaml').get('clients')
+_CONFIG = load_config('config.yaml')
+_CLIENTS = _CONFIG.get('clients')
 
 
 def fetch_torrents(client, active, sort=True):
@@ -39,4 +40,4 @@ def dashboard(active=False):
     )
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=_CONFIG.get('debug'))
