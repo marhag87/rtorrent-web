@@ -1,5 +1,5 @@
 <tr>
-    <td>
+    <td class="col-md-1">
         <div class="progress">
             <div
                 {% if torrent.completed_percent < 100 %}
@@ -21,10 +21,16 @@
     <td>
         {{ torrent.name }}
     </td>
-    <td>
-        {{ torrent.size|filesizeformat }}
+    <td class="col-md-1">
+        {{ torrent.up_rate|human_size }} / {{ torrent.down_rate|human_size }}
     </td>
-    <td>
+    <td class="col-md-1">
+        {{ torrent.size|human_size }}
+    </td>
+    <td class="col-md-1">
+        {{ torrent.uploaded|human_size }}
+    </td>
+    <td class="col-md-1">
         {{ '{0:.2f}'.format(torrent.ratio) }}
     </td>
 </tr>
