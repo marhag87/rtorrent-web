@@ -22,6 +22,9 @@
         {{ torrent.name }}
     </td>
     <td class="col-md-1">
+        {{ torrent.leechers }} / {{ torrent.seeders }}
+    </td>
+    <td class="col-md-1">
         {{ torrent.up_rate|human_size }} / {{ torrent.down_rate|human_size }}
     </td>
     <td class="col-md-1">
