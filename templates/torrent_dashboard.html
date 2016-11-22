@@ -14,11 +14,15 @@
                 style="width: {{ torrent.completed_percent }}%"
                 title="{{ torrent.completed_percent }}%"
             >
+            <span>{{ torrent.status }}</span>
             </div>
         </div>
     </td>
     <td>
         {{ torrent.name }}
+    </td>
+    <td>
+        {{ torrent.size|filesizeformat }}
     </td>
     <td>
         {{ '{0:.2f}'.format(torrent.ratio) }}

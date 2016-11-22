@@ -101,4 +101,14 @@ body {
   border-radius: 50%;
 }
 
-.progress {margin-bottom:0}
+.progress {
+  margin-bottom: 0;
+  position: relative;
+}
+
+.progress span {
+    position: absolute;
+    display: block;
+    width: 100%;
+    color: black;
+}
