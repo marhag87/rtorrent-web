@@ -18,22 +18,10 @@
             </div>
         </div>
     </td>
-    <td>
-        {{ torrent.name }}
-    </td>
-    <td class="col-md-1">
-        {{ torrent.leechers }} / {{ torrent.seeders }}
-    </td>
-    <td class="col-md-1">
-        {{ torrent.up_rate|human_size }} / {{ torrent.down_rate|human_size }}
-    </td>
-    <td class="col-md-1">
-        {{ torrent.size|human_size }}
-    </td>
-    <td class="col-md-1">
-        {{ torrent.uploaded|human_size }}
-    </td>
-    <td class="col-md-1">
-        {{ '{0:.2f}'.format(torrent.ratio) }}
-    </td>
+    <td class="torrent_name" id="{{ torrent.name }}">{{ torrent.name }}</td>
+    <td class="col-md-1 peers">{{ torrent.leechers }} / {{ torrent.seeders }}</td>
+    <td class="col-md-1 rate">{{ torrent.up_rate|human_size }} / {{ torrent.down_rate|human_size }}</td>
+    <td class="col-md-1 size">{{ torrent.size|human_size }}</td>
+    <td class="col-md-1 uploaded">{{ torrent.uploaded|human_size }}</td>
+    <td class="col-md-1 ratio">{{ '{0:.2f}'.format(torrent.ratio) }}</td>
 </tr>

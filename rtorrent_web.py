@@ -7,8 +7,6 @@ from pyyamlconfig import load_config
 from pyrtorrent import Rtorrent
 
 app = Flask(__name__)
-_CONFIG = load_config('config.yaml')
-_CLIENTS = _CONFIG.get('clients')
 
 
 @app.template_filter('human_size')
@@ -41,9 +39,13 @@ def do_filesizeformat(value, binary=False):
         return '%.1f %s' % ((base * value / unit), prefix)
 
 
-def fetch_torrents(client, active, sort=True):
+def all_torrents(client):
     rtorrent = Rtorrent(client.get('url'))
-    torrents = rtorrent.all_torrents()
+    return rtorrent.all_torrents()
+
+
+def fetch_torrents(client, active, sort=True):
+    torrents = all_torrents(client)
     if sort:
         torrents.sort(key=lambda x: x.name)
     my_dict = {
@@ -59,7 +61,7 @@ def fetch_torrents(client, active, sort=True):
 @app.route('/<active>')
 def dashboard(active=False):
     clients = []
-    for client in _CLIENTS:
+    for client in app.config.get('clients'):
         clients.append(
             fetch_torrents(client, active),
         )
@@ -70,4 +72,6 @@ def dashboard(active=False):
     )
 
 if __name__ == '__main__':
+    _CONFIG = load_config('config.yaml')
+    app.config['clients'] = _CONFIG.get('clients')
     app.run(debug=_CONFIG.get('debug'))
