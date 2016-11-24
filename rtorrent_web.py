@@ -5,38 +5,20 @@ from flask import (
 )
 from pyyamlconfig import load_config
 from pyrtorrent import Rtorrent
+from jinja2.filters import do_filesizeformat
 
 app = Flask(__name__)
 
 
 @app.template_filter('human_size')
-def do_filesizeformat(value, binary=False):
-    """Stolen from jinja2, but outputs "B" instad of "Bytes"
-    Format the value like a 'human-readable' file size (i.e. 13 kB,
-    4.1 MB, 102 Bytes, etc).  Per default decimal prefixes are used (Mega,
-    Giga, etc.), if the second parameter is set to `True` the binary
-    prefixes are used (Mebi, Gibi).
+def human_size(value, binary=False):
     """
-    value = float(value)
-    base = binary and 1024 or 1000
-    prefixes = [
-        (binary and 'KiB' or 'kB'),
-        (binary and 'MiB' or 'MB'),
-        (binary and 'GiB' or 'GB'),
-        (binary and 'TiB' or 'TB'),
-        (binary and 'PiB' or 'PB'),
-        (binary and 'EiB' or 'EB'),
-        (binary and 'ZiB' or 'ZB'),
-        (binary and 'YiB' or 'YB')
-    ]
-    if value < base:
-        return '%d B' % value
-    else:
-        for i, prefix in enumerate(prefixes):
-            unit = base ** (i + 2)
-            if value < unit:
-                return '%.1f %s' % ((base * value / unit), prefix)
-        return '%.1f %s' % ((base * value / unit), prefix)
+    Modify do_filesizeformat from jinja2 to shorten Bytes to B
+    """
+    size = do_filesizeformat(value, binary=binary)
+    size = size.replace('Bytes', 'B')
+    size = size.replace('Byte', 'B')
+    return size
 
 
 def all_torrents(client):
