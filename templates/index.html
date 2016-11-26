@@ -16,6 +16,9 @@
 
         <!-- Custom styles for this template -->
         <link href="static/dashboard.css" rel="stylesheet">
+
+        <!-- Fonts from fontawesome -->
+        <script src="https://use.fontawesome.com/662f4a1206.js"></script>
     </head>
 
     <body>
@@ -76,7 +79,7 @@
                     })
                 return param
             }
-            $(document).ready(function() {
+            function updatePage(){
                 var refreshId = setInterval(function() {
                     if (getQueryParam('active') == 'active') {
                         $("#content").load('torrents/');
@@ -85,6 +88,14 @@
                     }
                 }, 5000);
                 $.ajaxSetup({ cache: false });
+            }
+            function control_torrent(action, client_title, torrent_hash){
+                $.ajax({url: action + '/' + client_title + '/' + torrent_hash, success: function(){
+                    updatePage();
+                }});
+            }
+            $(document).ready(function() {
+                updatePage()
             });
         </script>
     </body>

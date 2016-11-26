@@ -24,4 +24,12 @@
     <td class="col-md-1 size">{{ torrent.size|human_size }}</td>
     <td class="col-md-1 uploaded">{{ torrent.uploaded|human_size }}</td>
     <td class="col-md-1 ratio">{{ '{0:.2f}'.format(torrent.ratio) }}</td>
+    <td class="col-md-1 controls">
+        {% if torrent.status == 'Closed' %}
+        <i class="fa fa-play" aria-hidden="true" onclick="control_torrent('start', '{{ client.title }}','{{ torrent.torrent_hash }}')"></i>
+        {% else %}
+        <i class="fa fa-stop" aria-hidden="true" onclick="control_torrent('stop', '{{ client.title }}','{{ torrent.torrent_hash }}')"></i>
+        {% endif %}
+        <i class="fa fa-times" aria-hidden="true" onclick="control_torrent('remove', '{{ client.title }}','{{ torrent.torrent_hash }}')"></i>
+    </td>
 </tr>

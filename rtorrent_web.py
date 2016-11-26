@@ -68,6 +68,33 @@ def torrents(active=False):
         active=active,
     )
 
+
+@app.route('/<action>/<client_title>/<torrent_hash>')
+def stop(action, client_title, torrent_hash):
+    found = False
+    for client in app.config['clients']:
+        if client.get('title') == client_title:
+            rtorrent = Rtorrent(client.get('url'))
+            found = True
+
+    if not found:
+        return "Could not find torrent", 404
+
+    torrent = rtorrent.torrent_by_hash(torrent_hash)
+    if action == 'stop':
+        torrent.stop()
+        message = "stopped"
+    elif action == 'start':
+        torrent.start()
+        message = "started"
+    elif action == 'remove':
+        torrent.erase()
+        message = "removed"
+    else:
+        return "Action not supported", 404
+
+    return "Torrent {}".format(message)
+
 if __name__ == '__main__':
     _CONFIG = load_config('config.yaml')
     app.config['clients'] = _CONFIG.get('clients')
