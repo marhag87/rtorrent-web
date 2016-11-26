@@ -53,6 +53,21 @@ def dashboard(active=False):
         active=active,
     )
 
+
+@app.route('/torrents/')
+@app.route('/torrents/<active>')
+def torrents(active=False):
+    clients = []
+    for client in app.config.get('clients'):
+        clients.append(
+            fetch_torrents(client, active),
+        )
+    return render_template(
+        'torrents.html',
+        clients=clients,
+        active=active,
+    )
+
 if __name__ == '__main__':
     _CONFIG = load_config('config.yaml')
     app.config['clients'] = _CONFIG.get('clients')

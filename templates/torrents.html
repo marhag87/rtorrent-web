@@ -1,0 +1,31 @@
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th class="col-md-1">Progress</th>
+            <th>Name</th>
+            <th class="col-md-1"><span title="Leechers / Seeders">Peers</span></th>
+            <th class="col-md-1"><span title="Upload rate / Download rate">Rate</span></th>
+            <th class="col-md-1">Size</th>
+            <th class="col-md-1">Uploaded</th>
+            <th class="col-md-1">Ratio</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% if active %}
+        {% for client in clients if client.active %}
+        {% for torrent in client.torrents %}
+        {% include 'torrent_dashboard.html' %}
+        {% endfor %}
+        {% endfor %}
+        {% else %}
+        {% for client in clients %}
+        {% for torrent in client.torrents %}
+        {% include 'torrent_dashboard.html' %}
+        {% endfor %}
+        {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+</div>

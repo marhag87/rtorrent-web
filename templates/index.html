@@ -49,45 +49,15 @@
                         {% endif %}
                         {% for client in clients %}
                             {% if client.active %}
-                                <li class="active"><a href="{{ client.title }}">{{ client.title }}<span class="sr-only">(current)</span></a></li>
+                                <li class="active"><a href="{{ client.title }}?active={{ client.title }}">{{ client.title }}<span class="sr-only">(current)</span></a></li>
                             {% else %}
-                                <li><a href="{{ client.title }}">{{ client.title }}</a></li>
+                                <li><a href="{{ client.title }}?active={{ client.title }}">{{ client.title }}</a></li>
                             {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
-                <div class="col-sm-10 col-sm-offset-2 col-md-11 col-md-offset-1 main">
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th class="col-md-1">Progress</th>
-                                    <th>Name</th>
-                                    <th class="col-md-1"><span title="Leechers / Seeders">Peers</span></th>
-                                    <th class="col-md-1"><span title="Upload rate / Download rate">Rate</span></th>
-                                    <th class="col-md-1">Size</th>
-                                    <th class="col-md-1">Uploaded</th>
-                                    <th class="col-md-1">Ratio</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                {% if active %}
-                                    {% for client in clients if client.active %}
-                                        {% for torrent in client.torrents %}
-                                            {% include 'torrent_dashboard.html' %}
-                                        {% endfor %}
-                                    {% endfor %}
-                                {% else %}
-                                    {% for client in clients %}
-                                        {% for torrent in client.torrents %}
-                                            {% include 'torrent_dashboard.html' %}
-                                        {% endfor %}
-                                    {% endfor %}
-                                {% endif %}
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="col-sm-10 col-sm-offset-2 col-md-11 col-md-offset-1 main" id="content">
+                    {% include 'torrents.html' %}
                 </div>
             </div>
         </div>
@@ -97,5 +67,25 @@
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script>
+            function getQueryParam(param) {
+                location.search.substr(1)
+                    .split("&")
+                    .some(function(item) { // returns first occurence and stops
+                        return item.split("=")[0] == param && (param = item.split("=")[1])
+                    })
+                return param
+            }
+            $(document).ready(function() {
+                var refreshId = setInterval(function() {
+                    if (getQueryParam('active') == 'active') {
+                        $("#content").load('torrents/');
+                    } else {
+                        $("#content").load('torrents/'+getQueryParam('active')+'?active='+getQueryParam('active'));
+                    }
+                }, 5000);
+                $.ajaxSetup({ cache: false });
+            });
+        </script>
     </body>
 </html>
