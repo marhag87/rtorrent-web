@@ -22,7 +22,12 @@
             </div>
         </div>
     </td>
-    <td class="torrent_name" id="{{ torrent.name }}">{{ torrent.name }}</td>
+    <td class="torrent_name" id="{{ torrent.name }}">
+        {% if torrent.custom1 != 'Seen' %}
+            <i class="fa fa-exclamation-circle" aria-hidden="true" title="New" onclick="control_torrent('seen', '{{ client.title }}', '{{ torrent.torrent_hash }}')"></i>
+        {% endif %}
+        {{ torrent.name }}
+    </td>
     <td class="col-md-1 peers">{{ torrent.leechers }} / {{ torrent.seeders }}</td>
     <td class="col-md-1 rate">{{ torrent.up_rate|human_size }} / {{ torrent.down_rate|human_size }}</td>
     <td class="col-md-1 size">{{ torrent.size|human_size }}</td>

@@ -90,10 +90,23 @@ def stop(action, client_title, torrent_hash):
     elif action == 'remove':
         torrent.erase()
         message = "removed"
+    elif action == 'seen':
+        torrent.custom1 = 'Seen'
+        message = "marked as seen"
     else:
         return "Action not supported", 404
 
     return "Torrent {}".format(message)
+
+
+@app.route('/mark_all_seen')
+def mark_all_seen():
+    for client in app.config['clients']:
+        rtorrent = Rtorrent(client.get('url'))
+        for torrent in rtorrent.all_torrents():
+            torrent.custom1 = 'Seen'
+
+    return "Marked all as seen"
 
 if __name__ == '__main__':
     _CONFIG = load_config('config.yaml')
