@@ -5,7 +5,11 @@
                 {% if torrent.completed_percent < 100 %}
                     class="progress-bar progress-bar-striped active"
                 {% else %}
-                    class="progress-bar progress-bar-success"
+                    {% if torrent.status == 'Closed' %}
+                        class="progress-bar progress-bar-warning"
+                    {% else %}
+                        class="progress-bar progress-bar-success"
+                    {% endif %}
                 {% endif %}
                 role="progressbar"
                 aria-valuenow="{{ torrent.completed_percent }}"
