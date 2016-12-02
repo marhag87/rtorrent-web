@@ -21,9 +21,64 @@ def human_size(value, binary=False):
     return size
 
 
+class MyTorrent():
+    def __init__(self, torrent):
+        self.torrent = torrent
+        self.name = torrent[0]
+
+        self.bytes_done = torrent[1]
+        self.bytes_left = torrent[2]
+        self.completed_percent = int(
+            (self.bytes_done/(self.bytes_done + self.bytes_left))*100
+        )
+
+        self.state = torrent[3]
+        self.complete = torrent[4]
+        if self.state == 0:
+            self.status = "Closed"
+        elif self.state == 1 and self.complete:
+            self.status = "Seeding"
+        elif self.state == 1 and not self.complete:
+            self.status = "Downloading"
+
+        self.custom1 = torrent[5]
+        self.torrent_hash = torrent[6]
+
+        self.peers_connected = torrent[7]
+        self.seeders = torrent[8]
+        self.leechers = self.peers_connected - self.seeders
+
+        self.up_rate = torrent[9]
+        self.down_rate = torrent[10]
+        self.size = torrent[11]
+        self.uploaded = torrent[12]
+        self.ratio = torrent[13]/1000
+
+
 def all_torrents(client):
     rtorrent = Rtorrent(client.get('url'))
-    return rtorrent.all_torrents()
+    return [
+        MyTorrent(x)
+        for
+        x
+        in
+        rtorrent.multicall([
+            'name',
+            'bytes_done',
+            'left_bytes',
+            'state',
+            'complete',
+            'custom1',
+            'hash',
+            'peers_connected',
+            'peers_complete',
+            'get_up_rate',
+            'get_down_rate',
+            'size_bytes',
+            'get_up_total',
+            'ratio',
+        ])
+    ]
 
 
 def fetch_torrents(client, active, sort=True):
