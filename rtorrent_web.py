@@ -125,7 +125,7 @@ def torrents(active=False):
 
 
 @app.route('/<action>/<client_title>/<torrent_hash>')
-def stop(action, client_title, torrent_hash):
+def do_action(action, client_title, torrent_hash):
     found = False
     for client in app.config['clients']:
         if client.get('title') == client_title:
