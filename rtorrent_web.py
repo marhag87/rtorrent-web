@@ -2,6 +2,7 @@
 from flask import (
     Flask,
     render_template,
+    request,
 )
 from pyyamlconfig import load_config
 from pyrtorrent import Rtorrent
@@ -40,8 +41,8 @@ def fetch_torrents(client, active, sort=True):
 
 
 @app.route('/')
-@app.route('/<active>')
-def dashboard(active=False):
+def dashboard():
+    active = request.args.get('active')
     clients = []
     for client in app.config.get('clients'):
         clients.append(
@@ -55,8 +56,8 @@ def dashboard(active=False):
 
 
 @app.route('/torrents/')
-@app.route('/torrents/<active>')
-def torrents(active=False):
+def torrents():
+    active = request.args.get('active')
     clients = []
     for client in app.config.get('clients'):
         clients.append(

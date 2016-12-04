@@ -52,9 +52,9 @@
                         {% endif %}
                         {% for client in clients %}
                             {% if client.active %}
-                                <li class="active"><a href="{{ client.title }}?active={{ client.title }}">{{ client.title }}<span class="sr-only">(current)</span></a></li>
+                                <li class="active"><a href="?active={{ client.title }}">{{ client.title }}<span class="sr-only">(current)</span></a></li>
                             {% else %}
-                                <li><a href="{{ client.title }}?active={{ client.title }}">{{ client.title }}</a></li>
+                                <li><a href="?active={{ client.title }}">{{ client.title }}</a></li>
                             {% endif %}
                         {% endfor %}
                     </ul>
