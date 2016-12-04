@@ -51,7 +51,7 @@ class TestRtorrentWeb(TestCase):
         Test that the category title is shown in the sidebar
         """
         self.assert_has_content(
-            '<li><a href="?active=Fedora">Fedora</a></li>',
+            '<a href="?active=Fedora">Fedora</a></li>',
         )
 
     def test_all_category_active(self):
@@ -59,7 +59,7 @@ class TestRtorrentWeb(TestCase):
         Test that the "All" category is active if none are selected
         """
         self.assert_has_content(
-            '<li class="active"><a href="All">All<span class="sr-only">(current)</span></a></li>',
+            '<li class="active"><a href="/">All<span class="sr-only">(current)</span></a></li>',
         )
 
     def test_selected_category_active(self):
@@ -68,7 +68,7 @@ class TestRtorrentWeb(TestCase):
         """
         self.result = self.app.get('/?active=Fedora')
         self.assert_has_content(
-            '<li class="active"><a href="?active=Fedora">Fedora<span class="sr-only">(current)</span></a></li>',
+            '<li class="active"><span class="sr-only">(current)</span><a href="?active=Fedora">Fedora</a></li>'
         )
 
     def test_has_torrents(self):

@@ -34,8 +34,8 @@
                     <a class="navbar-brand" href="#">Martin's Kickass rTorrent viewer</a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
-                    <form class="navbar-form navbar-right">
-                        <input type="text" class="form-control" placeholder="Search...">
+                    <form class="navbar-form navbar-right" action="javascript:void(0);">
+                        <input type="text" class="form-control" placeholder="Search..." id="searchbar">
                     </form>
                 </div>
             </div>
@@ -48,14 +48,10 @@
                         {% if active %}
                             <li><a href="/">All</a></li>
                         {% else %}
-                            <li class="active"><a href="All">All<span class="sr-only">(current)</span></a></li>
+                            <li class="active"><a href="/">All<span class="sr-only">(current)</span></a></li>
                         {% endif %}
                         {% for client in clients %}
-                            {% if client.active %}
-                                <li class="active"><a href="?active={{ client.title }}">{{ client.title }}<span class="sr-only">(current)</span></a></li>
-                            {% else %}
-                                <li><a href="?active={{ client.title }}">{{ client.title }}</a></li>
-                            {% endif %}
+                            {% if client.active %}<li class="active"><span class="sr-only">(current)</span>{% else %}<li>{% endif %}<a href="?active={{ client.title }}">{{ client.title }}</a></li>
                         {% endfor %}
                     </ul>
                     <ul class="nav nav-sidebar">
@@ -82,29 +78,36 @@
                     })
                 return param
             }
+
             function updatePage(){
                 var refreshId = setInterval(function() {
-                    if (getQueryParam('active') == 'active') {
-                        $("#content").load('torrents/');
-                    } else {
-                        $("#content").load('torrents/?active='+getQueryParam('active'));
-                    }
+                    $("#content").load('torrents/?active='+getQueryParam('active')+'&search='+getQueryParam('search'));
                 }, 5000);
                 $.ajaxSetup({ cache: false });
             }
+
             function control_torrent(action, client_title, torrent_hash){
                 $.ajax({url: action + '/' + client_title + '/' + torrent_hash, success: function(){
                     updatePage();
                 }});
             }
+
             $(document).ready(function() {
                 updatePage()
             });
+
             function mark_all_seen(){
                 $.ajax({url: 'mark_all_seen', success: function(){
                     updatePage();
                 }});
             }
+
+            $("#searchbar").keypress(function(event) {
+                if (event.which == 13) {
+                    $("#content").load('torrents/?active='+getQueryParam('active')+'&search='+this.value);
+                    window.location.replace('?active='+getQueryParam('active')+'&search='+this.value)
+                }
+            });
         </script>
     </body>
 </html>

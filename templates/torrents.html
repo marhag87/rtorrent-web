@@ -15,17 +15,17 @@
 
         <tbody>
         {% if active %}
-        {% for client in clients if client.active %}
-        {% for torrent in client.torrents %}
-        {% include 'torrent_dashboard.html' %}
-        {% endfor %}
-        {% endfor %}
+            {% for client in clients if client.active %}
+                {% for torrent in client.torrents %}
+                    {% include 'torrent_dashboard.html' %}
+                {% endfor %}
+            {% endfor %}
         {% else %}
-        {% for client in clients %}
-        {% for torrent in client.torrents %}
-        {% include 'torrent_dashboard.html' %}
-        {% endfor %}
-        {% endfor %}
+            {% for client in clients %}
+                {% for torrent in client.torrents %}
+                    {% include 'torrent_dashboard.html' %}
+                {% endfor %}
+            {% endfor %}
         {% endif %}
         </tbody>
     </table>

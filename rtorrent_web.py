@@ -27,10 +27,12 @@ def all_torrents(client):
     return rtorrent.all_torrents()
 
 
-def fetch_torrents(client, active, sort=True):
+def fetch_torrents(client, active, search, sort=True):
     torrents = all_torrents(client)
     if sort:
         torrents.sort(key=lambda x: x.name)
+    if search is not None:
+        torrents = [x for x in torrents if search in x.name.lower()]
     my_dict = {
         'torrents': torrents,
         'title': client.get('title'),
@@ -41,30 +43,18 @@ def fetch_torrents(client, active, sort=True):
 
 
 @app.route('/')
-def dashboard():
-    active = request.args.get('active')
-    clients = []
-    for client in app.config.get('clients'):
-        clients.append(
-            fetch_torrents(client, active),
-        )
-    return render_template(
-        'index.html',
-        clients=clients,
-        active=active,
-    )
-
-
 @app.route('/torrents/')
-def torrents():
-    active = request.args.get('active')
+def route():
+    active = False if request.args.get('active') == 'active' else request.args.get('active')
+    search = None if request.args.get('search') == 'search' else request.args.get('search')
     clients = []
     for client in app.config.get('clients'):
         clients.append(
-            fetch_torrents(client, active),
+            fetch_torrents(client, active, search),
         )
+    html = 'torrents.html' if request.path == '/torrents/' else 'index.html'
     return render_template(
-        'torrents.html',
+        html,
         clients=clients,
         active=active,
     )
@@ -72,13 +62,11 @@ def torrents():
 
 @app.route('/<action>/<client_title>/<torrent_hash>')
 def do_action(action, client_title, torrent_hash):
-    found = False
     for client in app.config['clients']:
         if client.get('title') == client_title:
             rtorrent = Rtorrent(client.get('url'))
-            found = True
-
-    if not found:
+            break
+    else:
         return "Could not find torrent", 404
 
     torrent = rtorrent.torrent_by_hash(torrent_hash)
