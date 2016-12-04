@@ -87,7 +87,7 @@
                     if (getQueryParam('active') == 'active') {
                         $("#content").load('torrents/');
                     } else {
-                        $("#content").load('torrents/'+getQueryParam('active')+'?active='+getQueryParam('active'));
+                        $("#content").load('torrents/?active='+getQueryParam('active'));
                     }
                 }, 5000);
                 $.ajaxSetup({ cache: false });
