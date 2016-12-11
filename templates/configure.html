@@ -30,37 +30,32 @@
 
 </disv>
 <script>
+    function show_error(key, error){
+        $("#client_" + key + "_form").addClass("has-error")
+        $("#" + key + "_help").text(error.responseText)
+        $("#" + key + "_help").show()
+    }
+    function hide_error(key){
+        $("#client_" + key + "_form").removeClass("has-error")
+        $("#" + key + "_help").hide()
+    }
     function addClient(){
-        $("#client_title_form").removeClass("has-error")
-        $("#client_url_form").removeClass("has-error")
-        $("#title_help").hide()
-        $("#url_help").hide()
+        hide_error('title')
+        hide_error('url')
         title = encodeURIComponent($('#client_title').val())
         url = encodeURIComponent($('#client_url').val())
 
         $.ajax({url: 'settings/add_client/' + title + '/' + url, success: function(){
             // Adding the client succeeded, reload sidebar and settings
             $("#content").load('configure');
-            $.ajax({url: 'sidebar', success: function(){
-                $("#sidebar").load('sidebar');
-            }});
+            $("#sidebar").load('sidebar');
         }, error: function(error){
             // Adding the client failed, tag the form(s) that failed
-            if (error.responseText.indexOf('title and url') !== -1){
-                $("#client_title_form").addClass("has-error")
-                $("#title_help").text(error.responseText)
-                $("#title_help").show()
-                $("#client_url_form").addClass("has-error")
-                $("#url_help").text(error.responseText)
-                $("#url_help").show()
-            } else if (error.responseText.indexOf('title') !== -1) {
-                $("#client_title_form").addClass("has-error")
-                $("#title_help").text(error.responseText)
-                $("#title_help").show()
-            } else if (error.responseText.indexOf('url') !== -1) {
-                $("#client_url_form").addClass("has-error")
-                $("#url_help").text(error.responseText)
-                $("#url_help").show()
+            if (error.responseText.indexOf('title') !== -1) {
+                show_error("title", error)
+            }
+            if (error.responseText.indexOf('url') !== -1) {
+                show_error("url", error)
             }
         }});
     }
@@ -68,9 +63,7 @@
         $.ajax({url: 'settings/remove_client/' + title, success: function(){
             // Removing the client succeeded, reload sidebar and settings
             $("#content").load('configure');
-            $.ajax({url: 'sidebar', success: function(){
-                $("#sidebar").load('sidebar');
-            }});
+            $("#sidebar").load('sidebar');
         }});
     }
 </script>
