@@ -1,0 +1,76 @@
+<disv id="clients_settings" class="col-md-4">
+    <h4>Clients</h4>
+    <div>
+        <ul class="list-group ">
+            {% for client in clients %}
+            <li class="list-group-item">
+                <span class="badge" onclick="removeClient('{{ client.title }}')">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </span>
+                {{ client.title }} - {{ client.url }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <form id="client_form" action="javascript:void(0);" onsubmit="addClient()">
+        <div id="client_title_form" class="form-group">
+            <label for="client_title">Client name</label>
+            <input id="client_title" type="text" class="form-control" aria-describedby="title_help">
+            <span id="title_help" class="help-block" style="display: none">A block of help text that breaks onto a new line and may extend beyond one line.</span>
+        </div>
+        <div id="client_url_form" class="form-group">
+            <label for="client_url">Client url</label>
+            <input id="client_url" type="text" class="form-control" aria-describedby="url_help">
+            <span id="url_help" class="help-block" style="display: none">A block of help text that breaks onto a new line and may extend beyond one line.</span>
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary">Add client</button>
+        </div>
+    </form>
+
+</disv>
+<script>
+    function addClient(){
+        $("#client_title_form").removeClass("has-error")
+        $("#client_url_form").removeClass("has-error")
+        $("#title_help").hide()
+        $("#url_help").hide()
+        title = encodeURIComponent($('#client_title').val())
+        url = encodeURIComponent($('#client_url').val())
+
+        $.ajax({url: 'settings/add_client/' + title + '/' + url, success: function(){
+            // Adding the client succeeded, reload sidebar and settings
+            $("#content").load('configure');
+            $.ajax({url: 'sidebar', success: function(){
+                $("#sidebar").load('sidebar');
+            }});
+        }, error: function(error){
+            // Adding the client failed, tag the form(s) that failed
+            if (error.responseText.indexOf('title and url') !== -1){
+                $("#client_title_form").addClass("has-error")
+                $("#title_help").text(error.responseText)
+                $("#title_help").show()
+                $("#client_url_form").addClass("has-error")
+                $("#url_help").text(error.responseText)
+                $("#url_help").show()
+            } else if (error.responseText.indexOf('title') !== -1) {
+                $("#client_title_form").addClass("has-error")
+                $("#title_help").text(error.responseText)
+                $("#title_help").show()
+            } else if (error.responseText.indexOf('url') !== -1) {
+                $("#client_url_form").addClass("has-error")
+                $("#url_help").text(error.responseText)
+                $("#url_help").show()
+            }
+        }});
+    }
+    function removeClient(title){
+        $.ajax({url: 'settings/remove_client/' + title, success: function(){
+            // Removing the client succeeded, reload sidebar and settings
+            $("#content").load('configure');
+            $.ajax({url: 'sidebar', success: function(){
+                $("#sidebar").load('sidebar');
+            }});
+        }});
+    }
+</script>

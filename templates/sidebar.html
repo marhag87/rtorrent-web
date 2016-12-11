@@ -1,0 +1,14 @@
+<ul class="nav nav-sidebar">
+    {% if active %}
+    <li><a href="/">All</a></li>
+    {% else %}
+    <li class="active"><a href="/">All<span class="sr-only">(current)</span></a></li>
+    {% endif %}
+    {% for client in clients %}
+    {% if client.active %}<li class="active"><span class="sr-only">(current)</span>{% else %}<li>{% endif %}<a href="/?active={{ client.title }}">{{ client.title }}</a></li>
+    {% endfor %}
+</ul>
+<ul class="nav nav-sidebar">
+    <li><a onclick="mark_all_seen()">Mark all as seen</a></li>
+    <li><a href="/settings">Settings</a></li>
+</ul>

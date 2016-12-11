@@ -1,0 +1,53 @@
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script>
+            function getQueryParam(param) {
+                location.search.substr(1)
+                    .split("&")
+                    .some(function(item) { // returns first occurence and stops
+                        return item.split("=")[0] == param && (param = item.split("=")[1])
+                    })
+                return param
+            }
+
+            function updatePage(){
+                if (window.location.pathname != '/settings') {
+                    var refreshId = setInterval(function() {
+                        $("#content").load('torrents/?active='+getQueryParam('active')+'&search='+getQueryParam('search'));
+                    }, 5000);
+                    $.ajaxSetup({ cache: false });
+                }
+            }
+
+            function control_torrent(action, client_title, torrent_hash){
+                $.ajax({url: action + '/' + client_title + '/' + torrent_hash, success: function(){
+                    updatePage();
+                }});
+            }
+
+            $(document).one('ready', function() {
+                updatePage()
+            });
+
+            function mark_all_seen(){
+                $.ajax({url: 'mark_all_seen', success: function(){
+                    updatePage();
+                }});
+            }
+
+            $("#searchbar").keypress(function(event) {
+                if (event.which == 13) {
+                    $("#content").load('torrents/?active='+getQueryParam('active')+'&search='+this.value);
+                    window.location.replace('?active='+getQueryParam('active')+'&search='+this.value)
+                }
+            });
+        </script>
+    </body>
+</html>
